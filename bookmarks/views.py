@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.contrib.postgres.search import SearchVector, SearchQuery
 
+from urllib.request import urlopen
 import lxml.html
 
 from .models import Bookmark, Tag
@@ -65,8 +66,9 @@ def bookmark_add(request):
             if 'title' in request.GET:
                 data['title'] = request.GET.get('title')
             else:
-                t = lxml.html.parse(url)
-                data['title'] = t.find(".//title").text
+                page = urlopen(data['url'])
+                p = lxml.html.parse(page)
+                data['title'] = p.find(".//title").text
 
         if 'auto_close' in request.GET:
             data['auto_close'] = request.GET.get('auto_close')
