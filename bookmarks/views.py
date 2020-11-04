@@ -166,9 +166,6 @@ def search_view(request):
     return render(request, 'search.html', {'bookmarks': page_obj, 'query': query})
             
             
-
-
-@login_required
 def login_page(request):
     incorrect_password = False
     if request.method == 'POST':
