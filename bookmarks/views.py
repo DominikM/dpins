@@ -7,6 +7,8 @@ from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.contrib.postgres.search import SearchVector, SearchQuery
 
+import lxml.html
+
 from .models import Bookmark, Tag
 from .forms import BookmarkForm, SimpleSearchForm
 
@@ -57,11 +59,14 @@ def bookmark_add(request):
             
     else:
         data = {}
-        if 'title' in request.GET:
-            data['title'] = request.GET.get('title')
-
         if 'url' in request.GET:
             data['url'] = request.GET.get('url')
+
+            if 'title' in request.GET:
+                data['title'] = request.GET.get('title')
+            else:
+                t = lxml.html.parse(url)
+                data['title'] = t.find(".//title").text
 
         if 'auto_close' in request.GET:
             data['auto_close'] = request.GET.get('auto_close')
