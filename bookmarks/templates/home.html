@@ -1,0 +1,29 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="{% static 'bookmarks/main.css' %}" />
+<title>dpins</title>
+</head>
+<body>
+  <div id="content">
+    <header><h1>dpins</h1></header>
+
+    <div class="boxed">
+      <form action="/login/" method="post">
+	{% csrf_token %}
+	{{ login_form }}
+	<input type="submit" value="login">
+      </form>
+      <p><a href={% url 'signup' %}>signup</a></p>
+    </div>
+    <div class="boxed">
+      <p>dpins is a simple bookmarking website.</p>
+    </div>
+  </div>
+</body>
+</html>

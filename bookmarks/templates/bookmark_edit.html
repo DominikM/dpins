@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<header><h1>edit bookmark</h1></header>
+
+<form method="post">
+  {% csrf_token %}
+  {{ bookmark_form }}
+  <input type="submit" value="update" />
+</form>
+
+{% endblock %}

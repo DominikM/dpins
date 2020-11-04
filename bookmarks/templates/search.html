@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<header><h1>dpins</h1></header>
+
+<div id="commands_container">
+  <div class="command"><a href="{% url 'bookmark_add' %}">add</a></div>
+  <div class="command"><a href="{% url 'logout' %}">logout</a></div>
+  <div class="command">
+    <form method="get" action="{% url 'search' %}">
+      <input type="text" id="query" name="query" value="{{ query }}">
+      <input type="submit" value="search">
+    </form>
+  </div>
+</div>
+
+<hr>
+
+<div id="bm_container">
+  {% for bookmark in bookmarks %}
+  {% include 'bookmark_snippet.html' with bookmark=bookmark %}
+  {% endfor %}
+</div>
+
+<div id="page_nav">
+  {% if bookmarks.has_previous %}
+  <a href="?page=1"><<</a>
+  <a href="?page={{ bookmarks.previous_page_number }}"><</a>
+  {% endif %}
+
+  {% if bookmarks.has_other_pages %}							 
+    {{ bookmarks.number }} of {{ bookmarks.paginator.num_pages }}
+  {% endif %}
+
+  {% if bookmarks.has_next %}
+  <a href="?page={{ bookmarks.next_page_number }}">></a>
+  <a href="?page={{ bookmarks.paginator.num_pages }}">>></a>
+  {% endif %}
+{% endblock %}

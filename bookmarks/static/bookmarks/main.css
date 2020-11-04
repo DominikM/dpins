@@ -1,0 +1,72 @@
+#content {
+    max-width: 1000px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+body {
+    font-family: "Roboto", sans-serif;
+}
+
+.boxed {
+    padding: 10px;
+    border: 2px solid black;
+    display: inline-block;
+    line-height: 1em;
+}
+
+#bm_container {
+    display: block;
+    margin-top: 1em;
+}
+
+.bm {
+    display: block;
+    margin-top: 0.8em;
+    margin-bottom: 0.8em;
+    border-left: 1px solid black;
+    padding-left: 0.5em;
+}
+
+.bm_commands {
+    display: inline;
+    font-size: 0.7em;
+    margin-left: 1em;
+}
+
+.bm_commands a {
+    color: #4f4f4f;
+}
+
+.bm_commands a:visited {
+    color: #4f4f4f;
+}
+	       
+
+a {color:#0000FF;}         /* Unvisited link  */
+a:visited {color:#0000FF;} /* Visited link    */
+a:hover {color:#ed5fe4;}   /* Mouse over link */
+a:active {color:#34c0eb;}  /* Selected link   */
+
+
+a.bm_title {
+    font-size: 1.2em;
+}
+
+#tags_container {
+    display: block;
+    font-size: 0.9em;
+    font-style: italic;
+}
+
+#commands_container {
+    display: block;
+}
+
+.command {
+    display: inline;
+}
+
+.command form {
+    display: inline;
+}
