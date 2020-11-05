@@ -7,6 +7,7 @@
 <div id="commands_container">
   <div class="command"><a href="{% url 'bookmark_add' %}">add</a></div>
   <div class="command"><a href="{% url 'logout' %}">logout</a></div>
+  <div class="command"><a href="javascript:(function(){data={title:document.title,url:window.location.href,auto_close: true};urlParams=new URLSearchParams(data);newUrl=new URL(&quot;http://dpins.link/add&quot;);newUrl.search = &quot;?&quot;+urlParams.toString();window.open(newUrl.toString());})();">bookmarklet</a></div>
   <div class="command">
     <form method="get" action="{% url 'search' %}">
       <input type="text" id="query" name="query">
