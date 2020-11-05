@@ -24,8 +24,6 @@ body {
     display: block;
     margin-top: 0.8em;
     margin-bottom: 0.8em;
-    border-left: 1px solid black;
-    padding-left: 0.5em;
 }
 
 .bm_commands {
@@ -89,3 +87,4 @@ a.bm_title {
 .command form {
     display: inline;
 }
+
