@@ -4,7 +4,7 @@
 {% block content %}
 <header><h1>import bookmarks from netscape html</h1></header>
 
-<form method="post">
+<form method="post" enctype="multipart/form-data">
   {% csrf_token %}
   {{ import_html_form }}
   <input type="submit" value="import"/>
