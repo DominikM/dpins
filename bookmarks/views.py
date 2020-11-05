@@ -24,7 +24,7 @@ def home(request):
 
 @login_required
 def bookmarks(request):
-    bookmarks = Bookmark.objects.filter(user=request.user)
+    bookmarks = Bookmark.objects.filter(user=request.user).latest('date_time_added')
     paginator = Paginator(bookmarks, 25)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
@@ -145,7 +145,7 @@ def bookmark_delete(request, bookmark_id):
 def tag_view(request, word):
     try:
         tag = Tag.objects.get(word=word)
-        bookmarks = tag.bookmarks.all()
+        bookmarks = tag.bookmarks.all().latest('date_time_added')
     except ObjectDoesNotExist:
         bookmarks = []
 
