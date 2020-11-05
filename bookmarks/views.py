@@ -205,7 +205,8 @@ def import_html(request):
                     b.tags.add(tag)
 
                 b.save()
-                return HttpResponseRedirect(reverse('home'))
+
+            return HttpResponseRedirect(reverse('home'))
 
     else:
         return render(request, 'import_html.html', {'import_html_form': ImportFileForm})
