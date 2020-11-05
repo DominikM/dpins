@@ -43,11 +43,18 @@ body {
 }
 	       
 
-a {color:#0000FF;}         /* Unvisited link  */
-a:visited {color:#0000FF;} /* Visited link    */
-a:hover {color:#ed5fe4;}   /* Mouse over link */
-a:active {color:#34c0eb;}  /* Selected link   */
+a {
+    color:#0000FF;
+    text-decoration: none;
+}
 
+a:hover {
+    color:#ed5fe4;
+}
+
+a:active {
+    color:#34c0eb;
+}
 
 a.bm_title {
     font-size: 1.2em;
@@ -58,6 +65,18 @@ a.bm_title {
     font-size: 0.9em;
     font-style: italic;
 }
+
+#tags_container a {
+    color: #613b3b;
+}
+
+#tags_container a:hover {
+    color: #c95d5d;
+}
+
+#tags_container a:active {
+    color: #5dc98a;
+}    
 
 #commands_container {
     display: block;
