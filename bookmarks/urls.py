@@ -26,5 +26,6 @@ urlpatterns = [
     path('edit/<bookmark_id>/', views.bookmark_edit, name='bookmark_edit'),
     path('delete/<bookmark_id>/', views.bookmark_delete, name='bookmark_delete'),
     path('tag/<word>/', views.tag_view, name='tag'),
-    path('search/', views.search_view, name='search')
+    path('search/', views.search_view, name='search'),
+    path('import_html/', views.import_html, name='import_html')
 ]

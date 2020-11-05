@@ -9,9 +9,10 @@ from django.contrib.postgres.search import SearchVector, SearchQuery
 
 from urllib.request import urlopen
 import lxml.html
+from lxml import etree
 
 from .models import Bookmark, Tag
-from .forms import BookmarkForm, SimpleSearchForm
+from .forms import BookmarkForm, ImportFileForm
 
 
 def home(request):
@@ -27,7 +28,7 @@ def bookmarks(request):
     paginator = Paginator(bookmarks, 25)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
-    return render(request, 'bookmarks.html', {'bookmarks': page_obj, 'bmform': BookmarkForm()})
+    return render(request, 'bookmarks.html', {'bookmarks': page_obj, 'bmform': BookmarkForm(), 'import_html_form': ImportFileForm()})
     
 
 @login_required
@@ -171,6 +172,43 @@ def search_view(request):
     page_obj = paginator.get_page(page_number)
 
     return render(request, 'search.html', {'bookmarks': page_obj, 'query': query})
+
+@login_required
+def import_html(request):
+    if request.method == "POST":
+        form = ImportFileForm(request.POST, files=request.FILES)
+
+        if form.is_valid(): 
+            html_file = request.FILES['html']
+            root = lxml.html.fromstring(html_file.read())
+            for dt in root.findall('.//dt'):
+                bookmark_a = dt.find('a')
+                if bookmark_a is None:
+                    continue
+                
+                title = bookmark_a.text
+                url = bookmark_a.get('href')
+                
+                tags_str = bookmark_a.get('tags')
+                tags_str_list = []
+                tags = []
+                if tags_str is not None:
+                    tags_str_list = tags_str.split(',')
+                
+                for tag_str in tags_str_list:
+                    if tag_str:
+                        tag, _ = Tag.objects.get_or_create(word=tag_str.strip(), user=request.user)
+                        tags.append(tag)
+                        
+                b = Bookmark.objects.create(title=title, url=url, user=request.user)
+                for tag in tags:
+                    b.tags.add(tag)
+
+                b.save()
+                return HttpResponseRedirect(reverse('home'))
+
+    else:
+        return render(request, 'import_html.html', {'import_html_form': ImportFileForm})
             
             
 def login_page(request):
