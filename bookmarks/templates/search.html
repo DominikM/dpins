@@ -3,18 +3,11 @@
 
 {% block content %}
 <h2>search for: "{{ query }}"</h2>
-<div id="commands_container">
-  <div class="command"><a href="{% url 'bookmark_add' %}">add</a></div>
-  <div class="command"><a href="{% url 'logout' %}">logout</a></div>
-  <div class="command">
-    <form method="get" action="{% url 'search' %}">
-      <input type="text" id="query" name="query" value="{{ query }}">
-      <input type="submit" value="search">
-    </form>
-  </div>
-</div>
 
-<hr>
+<form method="get" action="{% url 'search' %}">
+  <input type="text" id="query" name="query" value="{{ query }}">
+  <input type="submit" value="search">
+</form>
 
 <div id="bm_container">
   {% for bookmark in bookmarks %}
