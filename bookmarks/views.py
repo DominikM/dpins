@@ -112,7 +112,7 @@ def bookmark_edit(request, bookmark_id):
             if 'tags' in to_update:
                 tags_str = bookmark_form.cleaned_data['tags']
                 tags = set([tag_str.strip() for tag_str in tags_str.split(',')])
-                db_tags = set([tag.name for tag in bookmark.tags.all()])
+                db_tags = set([tag.word for tag in bookmark.tags.all()])
                     
                 for tag_str in tags.difference(db_tags):
                     tag = Tag.objects.get_or_create(name=tag_str)
