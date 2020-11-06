@@ -2,8 +2,7 @@
 {% load static %}
 
 {% block content %}
-<header><h1>dpins</h1></header>
-
+<h2>tag: "{{ tag }}"</h2>
 <div id="commands_container">
   <div class="command"><a href="{% url 'bookmark_add' %}">add</a></div>
   <div class="command"><a href="{% url 'logout' %}">logout</a></div>
