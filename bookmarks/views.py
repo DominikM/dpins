@@ -115,11 +115,11 @@ def bookmark_edit(request, bookmark_id):
                 db_tags = set([tag.word for tag in bookmark.tags.all()])
                     
                 for tag_str in tags.difference(db_tags):
-                    tag = Tag.objects.get_or_create(name=tag_str)
+                    tag = Tag.objects.get_or_create(word=tag_str)
                     bookmark.tags.add(tag)
                         
                 for tag_str in db_tags.difference(tags):
-                    tag = Tag.objects.get(name=tag_str)
+                    tag = Tag.objects.get(word=tag_str)
                     bookmark.tags.remove(tag)
 
             bookmark.save()           
