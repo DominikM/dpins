@@ -2,13 +2,7 @@
 {% load static %}
 
 {% block content %}
-<h2>tag: "{{ tag }}"</h2>
-<div id="commands_container">
-  <div class="command"><a href="{% url 'bookmark_add' %}">add</a></div>
-  <div class="command"><a href="{% url 'logout' %}">logout</a></div>
-</div>
-
-<hr>
+<h2>tag: "{{ word }}"</h2>
 
 <div id="bm_container">
   {% for bookmark in bookmarks %}

@@ -153,7 +153,7 @@ def tag_view(request, word):
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
-    return render(request, 'tag.html', {'bookmarks': page_obj})
+    return render(request, 'tag.html', {'bookmarks': page_obj, 'word': word})
 
 
 @login_required
