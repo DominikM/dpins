@@ -3,7 +3,8 @@
 
 {% block content %}
 <div id="commands_container">
-    <div class="command_left"><a href="{% url 'bookmark_add' %}">add</a></div>
+  <div class="command_left"><a href="{% url 'bookmark_add' %}">add</a></div>
+  <div class="command_left"><a href="{% url 'bookmarks_to_read' %}">to read</a></div>
     <div class="command_right"><a href="{% url 'logout' %}">logout</a></div>
     <div class="command_right"><a href="javascript:(function(){data={title:document.title,url:window.location.href,auto_close: true};urlParams=new URLSearchParams(data);newUrl=new URL(&quot;http://dpins.link/add&quot;);newUrl.search = &quot;?+urlParams.toString();window.open(newUrl.toString());})();">bookmarklet</a></div>
     <div class="command_right"><a href="{% url 'import_html' %}">import</a></div>

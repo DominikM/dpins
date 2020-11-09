@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 class Bookmark(models.Model):
     title = models.TextField()
     tags = models.ManyToManyField('Tag', related_name="bookmarks", blank=True)
+    to_read = models.BooleanField(default=False)
     url = models.URLField(max_length=500)
     date_time_added = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='bookmarks')

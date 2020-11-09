@@ -6,7 +6,21 @@ javascript:(function () {
     };
 
     urlParams = new URLSearchParams(data);
-    newUrl = new URL("http://dpins.link/add");
+    newUrl = new URL("https://dpins.link/add");
+    newUrl.search = "?" + urlParams.toString();
+    window.open(newUrl.toString());
+})();
+
+javascript:(function () {
+    data = {
+	title: document.title,
+	url: window.location.href,
+	auto_close: true,
+	to_read: true
+    };
+
+    urlParams = new URLSearchParams(data);
+    newUrl = new URL("https://dpins.link/add");
     newUrl.search = "?" + urlParams.toString();
     window.open(newUrl.toString());
 })();

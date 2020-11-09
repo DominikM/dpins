@@ -1,9 +1,14 @@
-<div class="bm">
+<div class="bm {% if bookmark.to_read %}unread{% endif %}">
     <div class="bm_row_1">
       <a class="bm_title" href="{{bookmark.url}}" target="_blank">{{bookmark.title}}</a>
       <div class="bm_commands">
 	<a href="{% url 'bookmark_edit' bookmark.id %}">edit</a>
 	<a href="{% url 'bookmark_delete' bookmark.id %}">delete</a>
+	{% if bookmark.to_read %}
+	<a href="{% url 'set_read' bookmark.id %}">mark read</a>
+	{% else %}
+	<a href="{% url 'set_unread' bookmark.id %}">mark unread</a>
+	{% endif %}
       </div>
     </div>
     <div id="tags_container">

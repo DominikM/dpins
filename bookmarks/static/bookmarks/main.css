@@ -30,8 +30,8 @@ body {
 
 .bm {
     display: block;
-    margin-top: 1em;
-    margin-bottom: 1em;
+    padding-top: 0.6em;
+    padding-bottom: 0.6em;
 }
 
 .bm_commands {
@@ -102,4 +102,6 @@ a.bm_title {
     margin-left: 0.5em
 }
 
-
+.unread {
+    background-color: #d4d4d4;
+}

@@ -13,6 +13,7 @@ from lxml import etree
 
 from .models import Bookmark, Tag
 from .forms import BookmarkForm, ImportFileForm
+from . import utils
 
 
 def home(request):
@@ -29,6 +30,14 @@ def bookmarks(request):
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     return render(request, 'bookmarks.html', {'bookmarks': page_obj, 'bmform': BookmarkForm(), 'import_html_form': ImportFileForm()})
+
+@login_required
+def bookmarks_to_read(request):
+    bookmarks = Bookmark.objects.filter(user=request.user, to_read=True).order_by('-date_time_added')
+    paginator = Paginator(bookmarks, 25)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    return render(request, 'bookmarks_to_read.html', {'bookmarks': page_obj, 'bmform': BookmarkForm(), 'import_html_form': ImportFileForm()})
     
 
 @login_required
@@ -37,23 +46,14 @@ def bookmark_add(request):
     if request.method == 'POST':
         bookmark_form = BookmarkForm(request.POST)
         if bookmark_form.is_valid():
-            title = bookmark_form.cleaned_data['title']
-            url = bookmark_form.cleaned_data['url']
-            tags_str = bookmark_form.cleaned_data['tags']
-
-            tags = []
-            tags_str = tags_str.split(',')
-            for tag_str in tags_str:
-                if tag_str:
-                    tag, _ = Tag.objects.get_or_create(word=tag_str.strip(), user=request.user)
-                    tags.append(tag)
-
-            b = Bookmark.objects.create(title=title, url=url, user=request.user)
-            for tag in tags:
-                b.tags.add(tag)
-                
-            b.save()
-
+            utils.create_bookmark(
+                bookmark_form.cleaned_data['title'],
+                bookmark_form.cleaned_data['url'],
+                bookmark_form.cleaned_data['tags_str'],
+                bookmark_form.cleaned_data['to_read'],
+                request.user
+            )
+            
             if bookmark_form.cleaned_data['auto_close']:
                 return render(request, 'close.html')
             else:
@@ -74,6 +74,10 @@ def bookmark_add(request):
         if 'auto_close' in request.GET:
             data['auto_close'] = request.GET.get('auto_close')
 
+        if 'to_read' in request.GET and request.GET.get('to_read'):
+            utils.create_bookmark(data['title'], data['url'], '', True, request.user)
+            return render(request, 'close.html')
+
         bookmark_form = BookmarkForm(initial=data)
         
 
@@ -90,7 +94,8 @@ def bookmark_edit(request, bookmark_id):
     bookmark_data= {
         'title': bookmark.title,
         'url': bookmark.url,
-        'tags': ','.join([tag.word for tag in bookmark.tags.all()])
+        'tags': ','.join([tag.word for tag in bookmark.tags.all()]),
+        'to_read': bookmark.to_read
     }
     
     if request.method == 'POST':
@@ -122,12 +127,42 @@ def bookmark_edit(request, bookmark_id):
                     tag = Tag.objects.get(word=tag_str, user=request.user)
                     bookmark.tags.remove(tag)
 
+            if 'to_read' in to_update:
+                to_read = bookmark_form.cleaned_data['to_read']
+                bookmark.to_read = to_read
+
             bookmark.save()           
             return HttpResponseRedirect(reverse('bm'))
 
     else:
         bookmark_form = BookmarkForm(initial=bookmark_data)
         return render(request, 'bookmark_edit.html', {'bookmark_form': bookmark_form})
+
+
+@login_required
+def set_read(request, bookmark_id):
+    try:
+        bookmark = Bookmark.objects.get(id=bookmark_id)
+        bookmark.to_read = False
+        bookmark.save()
+
+    except ObjectDoesNotExist:
+        pass
+
+    return HttpResponseRedirect(reverse('bm'))
+
+
+@login_required
+def set_unread(request, bookmark_id):
+    try:
+        bookmark = Bookmark.objects.get(id=bookmark_id)
+        bookmark.to_read = True
+        bookmark.save()
+
+    except ObjectDoesNotExist:
+        pass
+
+    return HttpResponseRedirect(reverse('bm'))
 
     
 @login_required

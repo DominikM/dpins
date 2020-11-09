@@ -27,5 +27,8 @@ urlpatterns = [
     path('delete/<bookmark_id>/', views.bookmark_delete, name='bookmark_delete'),
     path('tag/<word>/', views.tag_view, name='tag'),
     path('search/', views.search_view, name='search'),
-    path('import_html/', views.import_html, name='import_html')
+    path('import_html/', views.import_html, name='import_html'),
+    path('set_read/<bookmark_id>', views.set_read, name='set_read'),
+    path('set_unread/<bookmark_id>', views.set_unread, name='set_unread'),
+    path('to_read/', views.bookmarks_to_read, name='bookmarks_to_read')
 ]
