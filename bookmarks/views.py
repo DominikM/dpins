@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.contrib.postgres.search import SearchVector, SearchQuery
 
-from urllib.request import urlopen
+from urllib.request import urlopen, Request
 import lxml.html
 from lxml import etree
 
@@ -67,7 +67,9 @@ def bookmark_add(request):
             if 'title' in request.GET:
                 data['title'] = request.GET.get('title')
             else:
-                page = urlopen(data['url'])
+                req = Request(data['url'])
+                req.add_header('User-Agent', 'Mozilla/5.0')
+                page = urlopen(req)
                 p = lxml.html.parse(page)
                 data['title'] = p.find(".//title").text
 
