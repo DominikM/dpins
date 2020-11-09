@@ -49,7 +49,7 @@ def bookmark_add(request):
             utils.create_bookmark(
                 bookmark_form.cleaned_data['title'],
                 bookmark_form.cleaned_data['url'],
-                bookmark_form.cleaned_data['tags_str'],
+                bookmark_form.cleaned_data['tags'],
                 bookmark_form.cleaned_data['to_read'],
                 request.user
             )
