@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<h2>to read bookmarks</h2>
+
+<div id="bm_container">
+  <div id="page_nav">
+    {% if bookmarks.has_previous %}
+    <a href="?page=1"><<</a>
+    <a href="?page={{ bookmarks.previous_page_number }}"><</a>
+    {% endif %}
+
+    {% if bookmarks.has_other_pages %}							 
+    {{ bookmarks.number }} of {{ bookmarks.paginator.num_pages }}
+    {% endif %}
+
+    {% if bookmarks.has_next %}
+    <a href="?page={{ bookmarks.next_page_number }}">></a>
+    <a href="?page={{ bookmarks.paginator.num_pages }}">>></a>
+    {% endif %}
+  </div>
+  
+  {% for bookmark in bookmarks %}
+  {% include 'bookmark_snippet.html' with bookmark=bookmark %}
+  {% endfor %}
+
+  <div id="page_nav">
+    {% if bookmarks.has_previous %}
+    <a href="?page=1"><<</a>
+    <a href="?page={{ bookmarks.previous_page_number }}"><</a>
+    {% endif %}
+
+    {% if bookmarks.has_other_pages %}							 
+      {{ bookmarks.number }} of {{ bookmarks.paginator.num_pages }}
+    {% endif %}
+
+    {% if bookmarks.has_next %}
+    <a href="?page={{ bookmarks.next_page_number }}">></a>
+    <a href="?page={{ bookmarks.paginator.num_pages }}">>></a>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}
