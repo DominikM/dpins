@@ -10,6 +10,7 @@ from django.contrib.postgres.search import SearchVector, SearchQuery
 from urllib.request import urlopen, Request
 import lxml.html
 from lxml import etree
+import csv
 
 from .models import Bookmark, Tag
 from .forms import BookmarkForm, ImportFileForm
@@ -247,7 +248,22 @@ def import_html(request):
 
     else:
         return render(request, 'import_html.html', {'import_html_form': ImportFileForm})
-            
+
+@login_required
+def export_csv(request):
+    bookmarks = Bookmark.objects.all()
+
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="bookmarks.csv"'
+
+    writer = csv.writer(response)
+
+    for b in bookmarks:
+        tags_str = ','.join([tag.word for tag in b.tags.all()])
+        writer.writerow([b.url, b.title, b.to_read, b.date_time_added, tags_str])
+
+    return response
+    
             
 def login_page(request):
     incorrect_password = False
