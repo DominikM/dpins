@@ -6,6 +6,7 @@ from django.dispatch import receiver
 import os
 import uuid
 
+from django_q.tasks import async_task
 
 class SinglePageArchive(models.Model):
     bookmark = models.ForeignKey(
@@ -40,8 +41,8 @@ def single_page_archive_delete_file(sender, instance, **kwargs):
     if instance.rel_file_path:
         file_path = os.path.join(settings.MEDIA_ROOT, instance.rel_file_path)
         if os.path.isfile(file_path):
-            os.remove(file_path)
-
+            async_task(os.remove, file_path)
+            
     rm_empty_bookmark_dir(str(instance.bookmark.uuid))
 
 # @receiver(models.signals.post_delete, sender=MediaArchive)
@@ -55,7 +56,7 @@ def video_page_archive_delete_file(sender, instance, **kwargs):
     if instance.rel_file_path:
         file_path = os.path.join(settings.MEDIA_ROOT, instance.rel_file_path)
         if os.path.isfile(file_path):
-            os.remove(file_path)
+            async_task(os.remove, file_path)
 
     rm_empty_bookmark_dir(str(instance.bookmark.uuid))
 
@@ -66,4 +67,4 @@ def rm_empty_bookmark_dir(bookmark_uuid):
     
     files = os.listdir(dir_path)
     if len(files) == 0:
-        os.rmdir(dir_path)
+        async_task(os.rmdir, dir_path)
