@@ -31,5 +31,7 @@ urlpatterns = [
     path('export_csv/', views.export_csv, name='export_csv'),
     path('set_read/<bookmark_id>', views.set_read, name='set_read'),
     path('set_unread/<bookmark_id>', views.set_unread, name='set_unread'),
-    path('to_read/', views.bookmarks_to_read, name='bookmarks_to_read')
+    path('to_read/', views.bookmarks_to_read, name='bookmarks_to_read'),
+    path('help/', views.help_view, name='help'),
+    path('untagged/', views.untagged_view, name='untagged')
 ]

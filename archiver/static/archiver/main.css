@@ -1,0 +1,47 @@
+h1 a {
+    color: black;
+}
+
+h1 a:hover {
+    color: grey;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+}
+
+.first-row {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 200px;
+}
+
+.second-row {
+    position: absolute;
+    top: 200px; left: 0; right: 0; bottom: 0;
+}
+
+body {
+    font-family: "Roboto", sans-serif;
+}
+	       
+
+a {
+    color: #174287;
+    text-decoration: none;
+}
+
+a:hover {
+    color:#ed5fe4;
+}
+
+a:active {
+    color:#34c0eb;
+}
+
+a.bm_title {
+    font-size: 1.2em;
+}

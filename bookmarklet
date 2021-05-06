@@ -24,3 +24,16 @@ javascript:(function () {
     newUrl.search = "?" + urlParams.toString();
     window.open(newUrl.toString());
 })();
+
+javascript:(function () {
+    data = {
+	title: document.title,
+	url: window.location.href,
+	auto_close: true
+    };
+
+    urlParams = new URLSearchParams(data);
+    newUrl = new URL("http://127.0.0.1:8000/add");
+    newUrl.search = "?" + urlParams.toString();
+    window.open(newUrl.toString());
+})();

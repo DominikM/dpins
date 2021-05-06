@@ -7,9 +7,8 @@ from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.contrib.postgres.search import SearchVector, SearchQuery
 
-from urllib.request import urlopen, Request
-import lxml.html
-from lxml import etree
+from django_q.tasks import async_task
+
 import csv
 
 from .models import Bookmark, Tag
@@ -47,8 +46,13 @@ def bookmark_add(request):
     if request.method == 'POST':
         bookmark_form = BookmarkForm(request.POST)
         if bookmark_form.is_valid():
+            if bookmark_form.cleaned_data['title'] == '':
+                title = utils.get_page_title(bookmark_form.cleaned_data['url'])
+            else:
+                title = bookmark_form.cleaned_data['title']
+            
             utils.create_bookmark(
-                bookmark_form.cleaned_data['title'],
+                title,
                 bookmark_form.cleaned_data['url'],
                 bookmark_form.cleaned_data['tags'],
                 bookmark_form.cleaned_data['to_read'],
@@ -68,11 +72,7 @@ def bookmark_add(request):
             if 'title' in request.GET:
                 data['title'] = request.GET.get('title')
             else:
-                req = Request(data['url'])
-                req.add_header('User-Agent', 'Mozilla/5.0')
-                page = urlopen(req)
-                p = lxml.html.parse(page)
-                data['title'] = p.find(".//title").text
+                data['title'] = utils.get_page_title(data['url'])
 
         if 'auto_close' in request.GET:
             data['auto_close'] = request.GET.get('auto_close')
@@ -120,6 +120,7 @@ def bookmark_edit(request, bookmark_id):
             if 'tags' in to_update:
                 tags_str = bookmark_form.cleaned_data['tags']
                 tags = set([tag_str.strip() for tag_str in tags_str.split(',')])
+                tags.discard('')
                 db_tags = set([tag.word for tag in bookmark.tags.all()])
                     
                 for tag_str in tags.difference(db_tags):
@@ -192,6 +193,21 @@ def tag_view(request, word):
     page_obj = paginator.get_page(page_number)
 
     return render(request, 'tag.html', {'bookmarks': page_obj, 'word': word})
+
+@login_required
+def untagged_view(request):
+    bookmarks = Bookmark.objects.filter(tags=None)
+
+    paginator = Paginator(bookmarks, 25)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, 'tag.html', {'bookmarks': page_obj, 'word': 'untagged'})
+
+
+@login_required
+def help_view(request):
+    return render(request, 'help.html')
 
 
 @login_required

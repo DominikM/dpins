@@ -15,5 +15,6 @@
       {% else %}
       <a href="{% url 'set_unread' bookmark.id %}">mark unread</a>
       {% endif %}
+      <a href="{% url 'archive' bookmark.id %}">archive</a>
     </div>
 </div>

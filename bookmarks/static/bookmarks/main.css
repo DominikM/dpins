@@ -46,6 +46,14 @@ body {
 .bm_commands a:visited {
     color: #4f4f4f;
 }
+
+.bm_commands a:hover {
+    color:#ed5fe4;
+}
+
+.bm_commands a:active {
+    color:#34c0eb;
+}
 	       
 
 a {
@@ -94,6 +102,7 @@ a.bm_title {
 .command_left {
     display: inline;
     text-align: left;
+    margin-right: 0.5em;
 }
 
 .command_right {

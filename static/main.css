@@ -1,0 +1,41 @@
+body, html {
+    height: 100%;
+}
+
+h1 a {
+    color: black;
+}
+
+h1 a:hover {
+    color: grey;
+}
+
+#content {
+    max-width: 1000px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+body {
+    font-family: "Roboto", sans-serif;
+}
+
+.boxed {
+    padding: 10px;
+    border: 2px solid black;
+    display: inline-block;
+    line-height: 1em;
+}	       
+
+a {
+    color: #174287;
+    text-decoration: none;
+}
+
+a:hover {
+    color:#ed5fe4;
+}
+
+a:active {
+    color:#34c0eb;
+}
