@@ -15,7 +15,7 @@ BINGBOT_USER_AGENT = "Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko; compati
 
 def download_single_page(url, abs_path):
     command = [
-        "single-file",
+        settings.SINGLEFILE_PATH,
         "--output-directory=" + os.path.dirname(abs_path),
         "--filename-template=" + os.path.basename(abs_path),
         "--back-end=webdriver-chromium",
