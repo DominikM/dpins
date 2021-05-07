@@ -19,7 +19,6 @@ def download_single_page(url, abs_path):
         "--output-directory=" + os.path.dirname(abs_path),
         "--filename-template=" + os.path.basename(abs_path),
         "--back-end=webdriver-chromium",
-        '--user-agent="' + BINGBOT_USER_AGENT + '"',
         url,
     ]
     subprocess.run(command)
