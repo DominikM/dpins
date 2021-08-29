@@ -6,15 +6,16 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.contrib.postgres.search import SearchVector, SearchQuery
+from django.db.models import Q
 
 from django_q.tasks import async_task
 
 import csv
+import re
 
 from .models import Bookmark, Tag
 from .forms import BookmarkForm, ImportFileForm
 from . import utils
-
 
 def home(request):
     if request.user.is_authenticated:
@@ -214,18 +215,32 @@ def help_view(request):
 def search_view(request):
     bookmarks = request.user.bookmarks
     query = request.GET.get('query')
-    filtered_bookmarks = \
-        bookmarks.annotate(search=SearchVector('title', 'url', 'tags__word')) \
-                         .filter(search=SearchQuery(query)) \
-                         .distinct('id')
-
-    print(len(filtered_bookmarks))
+    original_query = query
     
+    q_object = Q()
+    
+    since_datetime, query = utils.get_since_query(query)
+    if since_datetime is not None:
+        q_object &= Q(date_time_added__gte=since_datetime)
+        
+    until_datetime, query = utils.get_until_query(query)
+    if until_datetime is not None:
+        q_object &= Q(date_time_added__lte=until_datetime)
+
+    filtered_bookmarks = bookmarks.filter(q_object)
+
+    if query and not query.isspace():
+        filtered_bookmarks = \
+            filtered_bookmarks.annotate(search=SearchVector('title')) \
+                              .filter(search=SearchQuery(query))
+
+    filtered_bookmarks = filtered_bookmarks.distinct('id')
+
     paginator = Paginator(filtered_bookmarks, 25)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
-    return render(request, 'search.html', {'bookmarks': page_obj, 'query': query})
+    return render(request, 'search.html', {'bookmarks': page_obj, 'query': original_query})
 
 @login_required
 def import_html(request):

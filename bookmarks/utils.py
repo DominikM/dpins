@@ -6,7 +6,11 @@ from urllib.request import urlopen, Request
 import lxml.html
 from lxml import etree
 import tldextract
+import re
+from datetime import datetime
 
+SEARCH_SINCE_RE = re.compile(r'\bsince:(\d{4}-\d{2}-\d{2})\b')
+SEARCH_UNTIL_RE = re.compile(r'\buntil:(\d{4}-\d{2}-\d{2})\b')
 
 def create_bookmark(title, url, tags_str, to_read, user):
     tags = []
@@ -38,3 +42,23 @@ def get_page_title(url):
         return title_html.text
     else:
         return url
+
+
+def get_since_query(query):
+    since = None
+    m = SEARCH_SINCE_RE.search(query)
+    if m is not None:
+        since = datetime.strptime(m.group(1), '%Y-%m-%d')
+        query = query[:m.span()[0]] + query[m.span()[1]:]
+
+    return since, query
+
+
+def get_until_query(query):
+    until = None
+    m = SEARCH_UNTIL_RE.search(query)
+    if m is not None:
+        until = datetime.strptime(m.group(1), '%Y-%m-%d')
+        query = query[:m.span()[0]] + query[m.span()[1]:]
+
+    return until, query
