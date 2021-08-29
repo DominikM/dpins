@@ -11,6 +11,7 @@ from datetime import datetime
 
 SEARCH_SINCE_RE = re.compile(r'\bsince:(\d{4}-\d{2}-\d{2})\b')
 SEARCH_UNTIL_RE = re.compile(r'\buntil:(\d{4}-\d{2}-\d{2})\b')
+SEARCH_TAGS_RE = re.compile(r'\btags:([\w,]+)\b')
 
 def create_bookmark(title, url, tags_str, to_read, user):
     tags = []
@@ -62,3 +63,14 @@ def get_until_query(query):
         query = query[:m.span()[0]] + query[m.span()[1]:]
 
     return until, query
+
+
+def get_tags_query(query):
+    tags = []
+    m = SEARCH_TAGS_RE.search(query)
+    if m is not None:
+        tags = m.group(1).split(',')
+        tags = [t for t in tags if t]
+        query = query[:m.span()[0]] + query[m.span()[1]:]
+
+    return tags, query

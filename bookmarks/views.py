@@ -214,8 +214,8 @@ def help_view(request):
 @login_required
 def search_view(request):
     bookmarks = request.user.bookmarks
-    query = request.GET.get('query')
-    original_query = query
+    original_query = request.GET.get('query').lower()
+    query = original_query.lower()
     
     q_object = Q()
     
@@ -227,12 +227,19 @@ def search_view(request):
     if until_datetime is not None:
         q_object &= Q(date_time_added__lte=until_datetime)
 
+    tags, query = utils.get_tags_query(query)
+    if tags:
+        tags_q_object = Q()
+        for tag in tags:
+            tags_q_object |= Q(tags__word=tag)
+        q_object &= tags_q_object
+
     filtered_bookmarks = bookmarks.filter(q_object)
 
     if query and not query.isspace():
         filtered_bookmarks = \
             filtered_bookmarks.annotate(search=SearchVector('title')) \
-                              .filter(search=SearchQuery(query))
+                              .filter(search=SearchQuery(query, search_type='websearch'))
 
     filtered_bookmarks = filtered_bookmarks.distinct('id')
 
