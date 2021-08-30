@@ -235,7 +235,10 @@ def search_view(request):
             qs = qs.filter(tags__word=tag)
         qs_tag_groups.append(qs)
 
-    filtered_bookmarks = qs_tag_groups[0].union(*qs_tag_groups[1:])
+    if len(qs_tag_groups) > 1:
+        filtered_bookmarks = qs_tag_groups[0].union(*qs_tag_groups[1:])
+    elif len(qs_tag_groups) == 1:
+        filtered_bookmarks = qs_tag_groups[0]        
 
     if query and not query.isspace():
         filtered_bookmarks = \
