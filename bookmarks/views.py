@@ -216,25 +216,26 @@ def search_view(request):
     bookmarks = request.user.bookmarks
     original_query = request.GET.get('query').lower()
     query = original_query.lower()
-    
-    q_object = Q()
+
+    filtered_bookmarks = bookmarks.all()
     
     since_datetime, query = utils.get_since_query(query)
     if since_datetime is not None:
-        q_object &= Q(date_time_added__gte=since_datetime)
+        filtered_bookmarks = filtered_bookmarks.filter(date_time_added__gte=since_datetime)
         
     until_datetime, query = utils.get_until_query(query)
     if until_datetime is not None:
-        q_object &= Q(date_time_added__lte=until_datetime)
+        filtered_bookmarks = filtered_bookmarks.filter(date_time_added__lte=until_datetime)
 
-    tags, query = utils.get_tags_query(query)
-    if tags:
-        tags_q_object = Q()
-        for tag in tags:
-            tags_q_object |= Q(tags__word=tag)
-        q_object &= tags_q_object
+    tag_groups, query = utils.get_tag_groups_query(query)
+    qs_tag_groups = []
+    for tag_group in tag_groups:
+        qs = filtered_bookmarks
+        for tag in tag_group:
+            qs = qs.filter(tags__word=tag)
+        qs_tag_groups.append(qs)
 
-    filtered_bookmarks = bookmarks.filter(q_object)
+    filtered_bookmarks = qs_tag_groups[0].union(*qs_tag_groups[1:])
 
     if query and not query.isspace():
         filtered_bookmarks = \
