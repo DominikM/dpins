@@ -9,7 +9,7 @@ class Bookmark(models.Model):
     tags = models.ManyToManyField('Tag', related_name="bookmarks", blank=True)
     to_read = models.BooleanField(default=False)
     url = models.URLField(max_length=500)
-    date_time_added = models.DateTimeField(auto_add_now=True)
+    date_time_added = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='bookmarks')
     uuid = models.UUIDField(unique=True, default=uuid.uuid4)
     
