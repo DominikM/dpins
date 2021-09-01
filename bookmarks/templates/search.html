@@ -17,8 +17,8 @@
 
 <div id="page_nav">
   {% if bookmarks.has_previous %}
-  <a href="?page=1"><<</a>
-  <a href="?page={{ bookmarks.previous_page_number }}"><</a>
+  <a href="?query={{ query }}&page=1"><<</a>
+  <a href="?query={{ query }}&page={{ bookmarks.previous_page_number }}"><</a>
   {% endif %}
 
   {% if bookmarks.has_other_pages %}							 
@@ -26,7 +26,7 @@
   {% endif %}
 
   {% if bookmarks.has_next %}
-  <a href="?page={{ bookmarks.next_page_number }}">></a>
-  <a href="?page={{ bookmarks.paginator.num_pages }}">>></a>
+  <a href="?query={{ query }}page={{ bookmarks.next_page_number }}">></a>
+  <a href="?query={{ query }}page={{ bookmarks.paginator.num_pages }}">>></a>
   {% endif %}
 {% endblock %}
