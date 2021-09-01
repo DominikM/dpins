@@ -246,6 +246,7 @@ def search_view(request):
                               .filter(search=SearchQuery(query, search_type='websearch'))
 
     filtered_bookmarks = filtered_bookmarks.distinct('id')
+    filtered_bookmarks = filtered_bookmarks.order_by('-date_time_added', 'title')
 
     paginator = Paginator(filtered_bookmarks, 25)
     page_number = request.GET.get('page')
