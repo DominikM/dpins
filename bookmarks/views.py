@@ -245,7 +245,6 @@ def search_view(request):
             filtered_bookmarks.annotate(search=SearchVector('title')) \
                               .filter(search=SearchQuery(query, search_type='websearch'))
 
-    filtered_bookmarks = filtered_bookmarks.distinct('id')
     filtered_bookmarks = filtered_bookmarks.order_by('-date_time_added', 'title')
 
     paginator = Paginator(filtered_bookmarks, 25)
