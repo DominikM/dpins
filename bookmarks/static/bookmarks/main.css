@@ -77,7 +77,7 @@ a.bm_title {
     display: block;
     font-size: 0.9em;
     font-style: italic;
-    margin: 0 0 0.4em 0;
+    margin: 0 0 0.2em 0;
 }
 
 #tags_container a {
@@ -90,7 +90,13 @@ a.bm_title {
 
 #tags_container a:active {
     color: #5dc98a;
-}    
+}
+
+#date_container {
+    color: #6b6b6b;
+    font-size: 0.8em;
+    margin: 0 0 0.3em 0;
+}
 
 #commands_container {
     display: block;
